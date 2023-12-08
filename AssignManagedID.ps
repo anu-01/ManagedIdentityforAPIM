@@ -1,0 +1,19 @@
+# Install the Azure AD module if you don't have it yet. 
+# Install-Module AzureAD
+
+ $tenantID = '<tenantID guid>'
+$serverApplicationName = '<Application Registration Name>'
+$managedIdentityName = '<managed identity name - for system assigned is the name of your resource>'
+$appRoleName = '<role name>'
+
+Connect-AzureAD -TenantId $tenantID
+# Look up the Logic app's managed identity's object ID.
+
+$managedIdentity = (Get-AzureADServicePrincipal -Filter "DisplayName eq '$managedIdentityName'")
+$managedIdentityObjectId = $managedIdentity.ObjectId
+
+# Look up the details about the server app's service principal and app role.
+
+$serverServicePrincipal = (Get-AzureADServicePrincipal -Filter "DisplayName eq '$serverApplicationName'")
+$serverServicePrincipalObjectId = $serverServicePrincipal.ObjectId
+$appRoleId = ($serverServicePrincipal.AppRoles | Where-Object {$_.Value -eq $appRoleName }).Id
