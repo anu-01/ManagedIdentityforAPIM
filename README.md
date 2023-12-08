@@ -63,27 +63,9 @@ I have used system assigned managed identity for Logic App.
 
 **Step 3: Assign Managed Identity access to the Application Role using powershell**
 
-Use the below script in azcli powershell to assign managed identity access to the application role
+Use the script from [file](https://github.com/anu-01/ManagedIdentityforAPIM/blob/main/AssignManagedID.ps)   
+in azcli powershell to assign managed identity access to the application role
 
-    # Install the Azure AD module if you don't have it yet. 
-    # Install-Module AzureAD
-  
-     $tenantID = '<tenantID guid>'
-    $serverApplicationName = '<Application Registration Name>'
-    $managedIdentityName = '<managed identity name - for system assigned is the name of your resource>'
-    $appRoleName = '<role name>'
-  
-    Connect-AzureAD -TenantId $tenantID
-    # Look up the Logic app's managed identity's object ID.
-  
-    $managedIdentity = (Get-AzureADServicePrincipal -Filter "DisplayName eq '$managedIdentityName'")
-    $managedIdentityObjectId = $managedIdentity.ObjectId
-   
-    # Look up the details about the server app's service principal and app role.
-  
-    $serverServicePrincipal = (Get-AzureADServicePrincipal -Filter "DisplayName eq '$serverApplicationName'")
-    $serverServicePrincipalObjectId = $serverServicePrincipal.ObjectId
-    $appRoleId = ($serverServicePrincipal.AppRoles | Where-Object {$_.Value -eq $appRoleName }).Id
 
  # Assign the managed identity access to the app role.
 
@@ -102,6 +84,7 @@ In your Logic App workflow:
   
   <li>Add authentication header and select the Authentication type as Managed Identity, select system-assigned managed identity and audience as the Application ID URI you recorded from the step 1.</li>
 </ol>
+
 ![image](https://github.com/anu-01/ManagedIdentityforAPIM/assets/19187402/431dd124-7968-4a1b-a12b-ee605346fb9d)
 
 
