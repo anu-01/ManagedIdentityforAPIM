@@ -90,29 +90,7 @@ In your Logic App workflow:
 
 **Step 5: Configure a JWT validation policy in the APIM to pre-authorize requests**
 
-Add the following Validate JWT policy to <inbound> policy section of your API which checks the value of the audience claim in an access token obtained from Azure AD and checks the additional claims for the app role and returns an error message if the token is not valid. Refer this link for more information.
-
-
-        <!--
-        replace the following values with the values in your solution:
-        tenantID - the guid representing your Azure Active Directory Tenant ID
-        clientId – api://client ID of the Application registered on Step 1
-        roleID   - the value of the role defined on Step 1
-        -->
-       <validate-jwt header-name="Authorization" failed-validation-httpcode="401" failed-validation-error-message="Unauthorized. Access token is missing or invalid." require-scheme="Bearer">
-        <openid-config url=https://login.microsoftonline.com/{{tenantID}}/v2.0/.well-known/openid-configuration />
-            <audiences>
-                <audience>{{clientID}}</audience>
-            </audiences>
-            <issuers>
-                <issuer>https://sts.windows.net/{{tenantID}}/</issuer>
-            </issuers>
-            <required-claims>
-                <claim name="roles" match="any">
-                    <value>{{roleId}}</value>
-                </claim>
-            </required-claims>
-        </validate-jwt>
+Add the following  [Validate JWT policy](https://github.com/anu-01/ManagedIdentityforAPIM/blob/main/jwtpolicy.xml) to <inbound> policy section of your API which checks the value of the audience claim in an access token obtained from Azure AD and checks the additional claims for the app role and returns an error message if the token is not valid. Refer this link for more information.
  
 
  
